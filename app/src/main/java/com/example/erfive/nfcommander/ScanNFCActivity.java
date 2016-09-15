@@ -1,21 +1,15 @@
 package com.example.erfive.nfcommander;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
-import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,23 +17,27 @@ import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 public class ScanNFCActivity extends AppCompatActivity {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
-    String telephone;
+    String mTelephone;
     NfcAdapter mNfcAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_nfc);
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         TextView tagText = (TextView) findViewById(R.id.TagText);
         Bundle b = getIntent().getExtras();
-        tagText.setText(b.getString("tel", "No tel"));
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        telephone = b.getString("tel", "No tel");
+        if(b.containsKey("tel")) {
+            tagText.setText("Passez votre tag NFC pour y entrer ce numéro : "+b.getString("tel", "No tel"));
+            mTelephone = b.getString("tel", "No tel");
+        } else if (b.containsKey("sms")) {
+            // TODO faire des trucs
+        }
+
 
 
     }
@@ -101,7 +99,7 @@ public class ScanNFCActivity extends AppCompatActivity {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
                 try {
-                    writeTag(telephone, tag);
+                    writeTag(mTelephone, tag);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (FormatException e) {
