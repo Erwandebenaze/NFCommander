@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tel_description">Entrez le numéro de téléphone que vous voudrez appeler avec cette puce.</string>
+    <string name="sms_description">Entrez le numéro de téléphone sur lequel vous voulez envoyer le SMS puis rédiger ce dernier.</string>
+    <string name="validationButton">Valider</string>
+    <string name="sms_autoCompletion">Entrez votre SMS.</string>
+    <string name="app_description">Sélectionnez l\'application que vous voulez lancer lorsque vous scanner le tag.</string>
+</resources>

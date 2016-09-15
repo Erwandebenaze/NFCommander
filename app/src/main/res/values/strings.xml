@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">NFCommander</string>
+    <string name="large_text">
+        "when a user tries to pick up one of cards.\n\n"
+    </string>
+    <string name="tel_description">Enter the phone number that you want call when you scan this tag.</string>
+    <string name="sms_description">Enter the phone number that you want send a SMS then type your SMS.</string>
+    <string name="sms_autoCompletion">Enter your SMS.</string>
+    <string name="app_description">Select the application that you want to launch when you scan this tag.</string>
+    <string name="action_settings">Settings</string>
+    <string name="validationButton">Validate</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_details_fragment">DetailsFragmentActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_main">MainActivity</string>
+</resources>
