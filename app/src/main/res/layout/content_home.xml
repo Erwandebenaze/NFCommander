@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_home">
 
     <Button
-        android:text="Button"
+        android:text="Programmer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/program_tag"

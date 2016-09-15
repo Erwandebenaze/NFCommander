@@ -56,19 +56,7 @@ public class DetailsFragmentActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-        Button submit = (Button) findViewById(R.id.program_tag);
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(DetailsFragmentActivity.this, ScanNFCActivity.class);
-                Bundle bundle = new Bundle();
-                EditText tele = (EditText) findViewById(R.id.tel_editText);
-                bundle.putString("tel", tele.getText().toString());
-                i.putExtras(bundle);
-                startActivity(i);
 
-            }
-        });
 
         // Vu qu'on add, ne pas oublier de les remove dans les Pause ou Stop
         // Add on Resume, Destroy  sur Pause

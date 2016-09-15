@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,12 +67,14 @@ public class HomeActivity extends AppCompatActivity implements SharedPreferences
 //        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view, strings);
 //        ListView list = (ListView) findViewById(R.id.tags_list);
 
-        Intent i = new Intent(HomeActivity.this, DetailsFragmentActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putString("title", "First App");
-//                i.putExtras(bundle);
-        startActivity(i);
-
+        Button submit = (Button) findViewById(R.id.program_tag);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeActivity.this, DetailsFragmentActivity.class);
+                startActivity(i);
+            }
+        });
     }
 
 
