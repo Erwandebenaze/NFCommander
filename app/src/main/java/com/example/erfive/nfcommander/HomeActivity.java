@@ -1,6 +1,9 @@
 package com.example.erfive.nfcommander;
 
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -9,6 +12,7 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,7 +34,7 @@ import org.w3c.dom.Text;
 import java.io.IOException;
 import java.util.List;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private NfcAdapter mNfcAdapter;
     public static final String MIME_TEXT_PLAIN = "text/plain";
@@ -49,7 +53,6 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
             finish();
             return;
-
         }
 
 //        if (!mNfcAdapter.isEnabled()) {
@@ -58,31 +61,42 @@ public class HomeActivity extends AppCompatActivity {
 //            mTextView.setText("NFC is enabled");
 //        }
 
-        String[] strings = new String[]{"Tag1", "Tag2", "Tag3"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view, strings);
-        ListView list = (ListView) findViewById(R.id.tags_list);
-        list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView textView = (TextView) view;
-                SharedPreferences.Editor editor = PreferenceManager
-                        .getDefaultSharedPreferences(HomeActivity.this).edit();
-                editor.putString("TagName", textView.getText().toString());
-                editor.apply();
-                Intent i = new Intent(HomeActivity.this, DetailsFragmentActivity.class);
+        //   String[] strings = new String[]{"Tag1", "Tag2", "Tag3"};
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.list_view, strings);
+//        ListView list = (ListView) findViewById(R.id.tags_list);
+
+        Intent i = new Intent(HomeActivity.this, DetailsFragmentActivity.class);
 //                Bundle bundle = new Bundle();
 //                bundle.putString("title", "First App");
 //                i.putExtras(bundle);
-                startActivity(i);
-            }
-        });
+        startActivity(i);
+
+    }
+
+
+
+//    //
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        SharedPreferences.Editor editor = PreferenceManager
+//                .getDefaultSharedPreferences(HomeActivity.this).edit();
+//        PreferenceManager
+//                .getDefaultSharedPreferences(HomeActivity.this).registerOnSharedPreferenceChangeListener(this);
+//        setupForegroundDispatch(this, mNfcAdapter);
+//    }
+
+    @Override
+    protected void onPause() {
+        stopForegroundDispatch(this, mNfcAdapter);
+        super.onPause();
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         handleIntent(intent);
     }
+
     private void handleIntent(Intent intent) {
 
         // Get all apps installed
@@ -117,7 +131,7 @@ public class HomeActivity extends AppCompatActivity {
             if (MIME_TEXT_PLAIN.equals(type)) {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                new NdefReaderTask().execute(tag);
+                new NdefReaderTask(HomeActivity.this).execute(tag);
 
             } else {
                 Log.d("COUCOU", "Wrong mime type: " + type);
@@ -131,33 +145,67 @@ public class HomeActivity extends AppCompatActivity {
 
             for (String tech : techList) {
                 if (searchedTech.equals(tech)) {
-                    new NdefReaderTask().execute(tag);
+                    new NdefReaderTask(HomeActivity.this).execute(tag);
                     break;
                 }
             }
         }
     }
 
+    public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+        final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_home, menu);
-        return true;
+        final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
+
+        IntentFilter[] filters = new IntentFilter[1];
+        String[][] techList = new String[][]{};
+
+        // Notice that this is the same filter as in our manifest.
+        filters[0] = new IntentFilter();
+        filters[0].addAction(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        filters[0].addCategory(Intent.CATEGORY_DEFAULT);
+        try {
+            filters[0].addDataType(MIME_TEXT_PLAIN);
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            throw new RuntimeException("Check your mime type.");
+        }
+
+        adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
 
+    public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
+        adapter.disableForegroundDispatch(activity);
+    }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_home, menu);
+//        return true;
+//    }
+////
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals("LatestTag")) {
+            Toast.makeText(this, "YOUPI, je suis dans latestTag : " + sharedPreferences.getString(key, "NONNNNN Y'A RIEN !!!"), Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(this, "Tag : " + sharedPreferences.getString(key, "NONNNNN Y'A RIEN !!!"), Toast.LENGTH_SHORT).show();
 
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

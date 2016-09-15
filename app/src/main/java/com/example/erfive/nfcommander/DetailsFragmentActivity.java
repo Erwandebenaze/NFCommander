@@ -1,5 +1,6 @@
 package com.example.erfive.nfcommander;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,9 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.erfive.nfcommander.Fragments.APPFragment;
 import com.example.erfive.nfcommander.Fragments.SMSFragment;
@@ -52,6 +56,19 @@ public class DetailsFragmentActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        Button submit = (Button) findViewById(R.id.program_tag);
+        submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(DetailsFragmentActivity.this, ScanNFCActivity.class);
+                Bundle bundle = new Bundle();
+                EditText tele = (EditText) findViewById(R.id.tel_editText);
+                bundle.putString("tel", tele.getText().toString());
+                i.putExtras(bundle);
+                startActivity(i);
+
+            }
+        });
 
         // Vu qu'on add, ne pas oublier de les remove dans les Pause ou Stop
         // Add on Resume, Destroy  sur Pause

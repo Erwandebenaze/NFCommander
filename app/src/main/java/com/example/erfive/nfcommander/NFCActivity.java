@@ -91,13 +91,6 @@ public class NFCActivity extends AppCompatActivity {
 
     @Override
     protected void onNewIntent(Intent intent) {
-        /*
-         * This method gets called, when a new Intent gets associated with the current activity instance.
-         * Instead of creating a new activity, onNewIntent will be called. For more information have a look
-         * at the documentation.
-         *
-         * In our case this method gets called, when the user attaches a Tag to the device.
-         */
         handleIntent(intent);
     }
 
@@ -135,7 +128,7 @@ public class NFCActivity extends AppCompatActivity {
             if (MIME_TEXT_PLAIN.equals(type)) {
 
                 Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-                new NdefReaderTask().execute(tag);
+                new NdefReaderTask(this).execute(tag);
 
             } else {
                 Log.d(TAG, "Wrong mime type: " + type);

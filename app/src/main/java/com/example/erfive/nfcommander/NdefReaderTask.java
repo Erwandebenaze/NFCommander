@@ -1,5 +1,6 @@
 package com.example.erfive.nfcommander;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.nfc.FormatException;
 import android.nfc.NdefMessage;
@@ -20,6 +21,10 @@ import java.util.Arrays;
 
 public class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
+    Context mContext;
+    public NdefReaderTask (Context ctx){
+        mContext = ctx;
+    }
     @Override
     protected String doInBackground(Tag... params) {
         Tag tag = params[0];
@@ -67,8 +72,9 @@ public class NdefReaderTask extends AsyncTask<Tag, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
+
             SharedPreferences.Editor editor = PreferenceManager
-                    .getDefaultSharedPreferences(HomeActivity.this).edit();
+                    .getDefaultSharedPreferences(mContext).edit();
             editor.putString("LatestTag", result);
             editor.apply();
         }
