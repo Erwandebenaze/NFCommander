@@ -96,8 +96,6 @@ public class DetailsFragmentActivity extends AppCompatActivity {
                     return TELFragment.newInstance(position);
                 case 1 :
                     return SMSFragment.newInstance(position);
-                case 2 :
-                    return APPFragment.newInstance(position);
             }
             return null;
         }
