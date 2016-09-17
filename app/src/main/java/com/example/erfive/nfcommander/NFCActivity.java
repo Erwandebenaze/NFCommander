@@ -48,11 +48,9 @@ public class NFCActivity extends AppCompatActivity {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         if (mNfcAdapter == null) {
-            // Stop here, we definitely need NFC
             Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
             finish();
             return;
-
         }
 
         if (!mNfcAdapter.isEnabled()) {
@@ -61,30 +59,19 @@ public class NFCActivity extends AppCompatActivity {
             mTextView.setText("NFC is enabled");
         }
 
-
         handleIntent(getIntent());
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        /*
-         * It's important, that the activity is in the foreground (resumed). Otherwise
-         * an IllegalStateException is thrown.
-         */
+        setupForegroundDispatch(this, mNfcAdapter);
     }
 
     @Override
     protected void onPause() {
-        /*
-         * Call this before onPause, otherwise an IllegalArgumentException is thrown as well.
-         */
         stopForegroundDispatch(this, mNfcAdapter);
-
         super.onPause();
     }
 
@@ -95,32 +82,6 @@ public class NFCActivity extends AppCompatActivity {
     }
 
     private void handleIntent(Intent intent) {
-
-        // Get all apps installed
-        final PackageManager pm = getPackageManager();
-        //get a list of installed apps.
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-        for (ApplicationInfo packageInfo : packages) {
-            String appName = (String) packageInfo.loadLabel(pm);
-//          Log.d(TAG, "Installed package :" + packageInfo.packageName);
-        }
-
-        // Phone call
-//        Intent intentCall = new Intent(Intent.ACTION_CALL, Uri.parse("tel:0618709069"));
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-//            return;
-//        }
-//        startActivity(intentCall);
-
-        // Lanch app
-//        Intent launchIntent = getPackageManager().getLaunchIntentForPackage("com.sec.android.app.popupcalculator");
-//        startActivity(launchIntent);
-
-        // SMS sending
-//        SmsManager smsManager = SmsManager.getDefault();
-//        smsManager.sendTextMessage("0618709069", null, "Tu es tellement trop mignon <3", null, null);
-
         String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
 
@@ -135,7 +96,6 @@ public class NFCActivity extends AppCompatActivity {
             }
         }
     }
-
 
     /*
      * @param activity The corresponding {@link Activity} requesting the foreground dispatch.
