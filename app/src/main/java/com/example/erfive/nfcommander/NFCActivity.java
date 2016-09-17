@@ -28,7 +28,7 @@ import java.util.List;
 public class NFCActivity extends AppCompatActivity {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
-    public static final String TAG = "NfcDemo";
+    public static final String TAG = "NfCommander";
 
     private TextView mTextView = null;
     private NfcAdapter mNfcAdapter = null;
