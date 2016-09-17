@@ -6,48 +6,44 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
 
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".HomeActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".HomeActivity" android:label="@string/app_name" android:theme="@style/AppTheme.NoActionBar">
+            <!--Launcher filter-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+            <!--NFC Tech discovered filter-->
             <intent-filter>
-                <action android:name="android.nfc.action.TECH_DISCOVERED"></action>
+                <action android:name="android.nfc.action.TECH_DISCOVERED" />
             </intent-filter>
-            <meta-data android:name="android.nfc.action.TECH_DISCOVERD" android:resource="@xml/nfc_tech_filter"></meta-data>
+            <meta-data android:name="android.nfc.action.TECH_DISCOVERD" android:resource="@xml/nfc_tech_filter" />
 
+            <!--NFC NDEF discovered filter-->
             <intent-filter>
-                <action android:name="android.nfc.action.NDEF_DISCOVERED"></action>
-                <category android:name="android.intent.category.DEFAULT"></category>
-                <data android:mimeType="text/plain"></data>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
             </intent-filter>
 
+            <!--nfc Tag discovered filter-->
             <intent-filter>
                 <action android:name="android.nfc.action.TAG_DISCOVERED"/>
             </intent-filter>
         </activity>
-        <activity android:name=".DetailsActivity" />
-        <activity
-            android:name=".DetailsFragmentActivity"
-            android:label="@string/title_activity_details_fragment"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".DetailsFragmentActivity" android:label="@string/title_activity_details_fragment"  android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ScanNFCActivity" />
-        <activity android:name=".NFCActivity"></activity>
     </application>
 
 </manifest>

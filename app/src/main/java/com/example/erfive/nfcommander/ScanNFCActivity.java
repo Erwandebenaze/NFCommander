@@ -23,6 +23,7 @@ public class ScanNFCActivity extends AppCompatActivity {
     public static final String MIME_TEXT_PLAIN = "text/plain";
     String mTelephone;
     NfcAdapter mNfcAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,14 +38,17 @@ public class ScanNFCActivity extends AppCompatActivity {
         } else if (b.containsKey("sms")) {
             // TODO faire des trucs
         }
-
-
-
     }
 
+    /**
+     * Creates a NdefRecord from a string
+     * @param text
+     * @return
+     * @throws UnsupportedEncodingException
+     */
     private NdefRecord createRecord(String text) throws UnsupportedEncodingException {
 
-        //create the message in according with the standard
+        // Create the message as a byte array in according with the standard encoding
         String lang = "en";
         byte[] textBytes = text.getBytes();
         byte[] langBytes = lang.getBytes("US-ASCII");
@@ -62,6 +66,13 @@ public class ScanNFCActivity extends AppCompatActivity {
         return recordNFC;
     }
 
+    /**
+     * Writes a text into an NFC tag
+     * @param text The text to write into the NFC tag
+     * @param tag The NFC tag to write into
+     * @throws IOException
+     * @throws FormatException
+     */
     private void writeTag(String text, Tag tag) throws IOException, FormatException {
 
         NdefRecord[] records = {createRecord(text)};

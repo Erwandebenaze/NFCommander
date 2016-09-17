@@ -1,6 +1,5 @@
 package com.example.erfive.nfcommander;
 
-import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,11 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
-import com.example.erfive.nfcommander.Fragments.APPFragment;
 import com.example.erfive.nfcommander.Fragments.SMSFragment;
 import com.example.erfive.nfcommander.Fragments.TELFragment;
 
@@ -54,18 +49,10 @@ public class DetailsFragmentActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("NFCommander");
         getSupportActionBar().setSubtitle("Programmez votre TAG NFC");
 
+        // Set up the tabLayout
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-
-        // Vu qu'on add, ne pas oublier de les remove dans les Pause ou Stop
-        // Add on Resume, Destroy  sur Pause
-//        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
-//            @Override
-//            public void onPageSelected(int position) {
-//                super.onPageSelected(position);
-//            }
-//        });
     }
 
 
@@ -117,7 +104,7 @@ public class DetailsFragmentActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
+            // Show 2 total pages.
             return 2;
         }
 
@@ -128,8 +115,6 @@ public class DetailsFragmentActivity extends AppCompatActivity {
                     return "Téléphone";
                 case 1:
                     return "SMS";
-                case 2:
-                    return "Application";
             }
             return null;
         }

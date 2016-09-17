@@ -16,9 +16,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
 /**
- * AsyncTask {@link com.example.erfive.nfcommander.NdefReaderTask} to read a tag contained in an NFC Tag
+ * AsyncTask to get the text contained in an NFC Tag
  */
-
 public class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
     public static final String TAG = "NfCommander";
@@ -27,7 +26,7 @@ public class NdefReaderTask extends AsyncTask<Tag, Void, String> {
     private Context mContext;
 
     /**
-     *
+     * NdefReaderTask constructor
      * @param ctx Context from which the task is called
      */
     public NdefReaderTask (Context ctx){
@@ -89,6 +88,10 @@ public class NdefReaderTask extends AsyncTask<Tag, Void, String> {
         return new String(payload, languageCodeLength + 1, payload.length - languageCodeLength - 1, textEncoding);
     }
 
+    /**
+     * Exectuted when doInBackground returns a result
+     * @param result The string from the NFC Tag's content
+     */
     @Override
     protected void onPostExecute(String result) {
         if (result != null) {
